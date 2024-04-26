@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>HTML Geolocation</h1>
+<p>Click the button to get your coordinates.</p>
+
+<p id="demo"></p>
+
+<script>
+const x = document.getElementById("demo");
+let intervalId;
+
+function startGettingLocation() {
+  getLocation(); // Get location immediately
+  intervalId = setInterval(getLocation, 10000); // Get location every 10 seconds
+}
+
+function stopGettingLocation() {
+  clearInterval(intervalId);
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, showError, {maximumAge: 600000, timeout: 5000, enableHighAccuracy: true});
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML += "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude + "<br>";
+}
+
+function showError(error) {
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+      x.innerHTML = "User denied the request for Geolocation.";
+      break;
+    case error.POSITION_UNAVAILABLE:
+      x.innerHTML = "Location information is unavailable.";
+      break;
+    case error.TIMEOUT:
+      x.innerHTML = "The request to get user location timed out.";
+      break;
+    case error.UNKNOWN_ERROR:
+      x.innerHTML = "An unknown error occurred.";
+      break;
+  }
+}
+
+startGettingLocation(); // Start location tracking automatically
+</script>
+
+</body>
+</html>
